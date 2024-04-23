@@ -35,6 +35,26 @@ public class PizzaService {
         return this.pizzaRepository.findById(idPizza).orElse(null);
     }
 
+    public List<PizzaEntity> getAvailablePizza(){
+        System.out.println(this.pizzaRepository.countByVeganTrue());
+        return this.pizzaRepository.findAllByAvailableTrueOrderByPrice();
+    }
+
+    public PizzaEntity getByNamePizza(String name){
+        return this.pizzaRepository.findFirstByAvailableTrueAndNameIgnoreCase(name).orElseThrow(()-> new RuntimeException("La pizza no existe"));
+    }
+
+    public List<PizzaEntity> getWith(String ingredient){
+        return this.pizzaRepository.findAllByAvailableTrueAndDescriptionContainingIgnoreCase(ingredient);
+    }
+
+    public List<PizzaEntity> getWithOut(String ingredient){
+        return this.pizzaRepository.findAllByAvailableTrueAndDescriptionNotContainingIgnoreCase(ingredient);
+    }
+
+    public List<PizzaEntity> getCheapestPizza(double price){
+        return this.pizzaRepository.findTop3ByAvailableTrueAndPriceLessThanEqualOrderByPriceAsc(price);
+    }
     public PizzaEntity save(PizzaEntity pizza){
         return this.pizzaRepository.save(pizza);
     }
