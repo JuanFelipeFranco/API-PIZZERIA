@@ -1,11 +1,15 @@
 package com.felipe.pizzeria.service;
 
 import com.felipe.pizzeria.persistence.entity.PizzaEntity;
+import com.felipe.pizzeria.persistence.repository.PizzaPagSortRepository;
 import com.felipe.pizzeria.persistence.repository.PizzaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.awt.print.Pageable;
 import java.util.List;
 
 @Service
@@ -16,12 +20,14 @@ public class PizzaService {
 
     //con
     private final PizzaRepository pizzaRepository;
+    private final PizzaPagSortRepository pizzaPagSortRepository;
 
 
     //como se anoto como final lo agregamos como constructor de parametro
     @Autowired
-    public PizzaService(PizzaRepository pizzaRepository) {
+    public PizzaService(PizzaRepository pizzaRepository, PizzaPagSortRepository pizzaPagSortRepository) {
         this.pizzaRepository = pizzaRepository;
+        this.pizzaPagSortRepository = pizzaPagSortRepository;
     }
 
     //metodo con el que consultamos todas las pizzas que tenemos en la pizzeria
@@ -34,6 +40,12 @@ public class PizzaService {
     public PizzaEntity getPizza(int idPizza){
         return this.pizzaRepository.findById(idPizza).orElse(null);
     }
+
+    //-----------------------------paging and Sorting----------------------
+   /* public Page<PizzaEntity> getAvailable(int page, int elements, String sortBy){
+        Pageable pageRequest = PageRequest.of(page,elements, Sort.by(sortBy));
+        return this.pizzaPagSortRepository.findByAvailableTrue(pageRequest);
+    }*/
 
     public List<PizzaEntity> getAvailablePizza(){
         System.out.println(this.pizzaRepository.countByVeganTrue());

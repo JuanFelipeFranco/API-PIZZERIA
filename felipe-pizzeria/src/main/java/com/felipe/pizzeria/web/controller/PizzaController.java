@@ -2,6 +2,7 @@ package com.felipe.pizzeria.web.controller;
 
 import com.felipe.pizzeria.persistence.entity.PizzaEntity;
 import com.felipe.pizzeria.service.PizzaService;
+import org.hibernate.query.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,6 +28,13 @@ public class PizzaController {
     public ResponseEntity<PizzaEntity> getPizza(@PathVariable int idPizza){
         return ResponseEntity.ok(this.pizzaService.getPizza(idPizza));
     }
+//------------------PAGE AND SORTING-------------------------------------------------
+/*    @GetMapping("/available")
+    public ResponseEntity<Page<PizzaEntity>> getAvailable(@RequestParam(defaultValue = "0") int page,
+                                                          @RequestParam(defaultValue = "8")int elements,
+                                                          @RequestParam(defaultValue = "price")String sortBy){
+        return ResponseEntity.ok(this.pizzaService.getAvailable(page, elements, sortBy));
+    }*/
 
     @GetMapping("/available")
     public ResponseEntity<List<PizzaEntity>> getAvailablePizza(){
