@@ -36,6 +36,7 @@ public class SecurityConfig {
         return http.build();
     }
 
+/*
      @Bean //spring reconoce que estamos trabajando con usuarios propios
     public UserDetailsService memoryUsers() {
 //CCREANDO NUESTRO ADMIN EN MEMORIA
@@ -53,8 +54,8 @@ public class SecurityConfig {
                 .build();
         return new InMemoryUserDetailsManager(admin, customer);
     }
-
-
+*/
+    
     @Bean
     public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
