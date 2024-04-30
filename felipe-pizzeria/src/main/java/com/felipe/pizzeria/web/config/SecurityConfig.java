@@ -10,6 +10,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
@@ -31,12 +33,12 @@ public class SecurityConfig {
                 .httpBasic();
         return http.build();
     }
-    
+
      @Bean //spring reconoce que estamos trabajando con usuarios propios
     public UserDetailsService memoryUsers() {
         UserDetails admin = User.builder()
                 .username("admin")
-                .password(passwordEncoder().encode("admin"))
+                .password()
                 .roles("ADMIN")
                 .build();
 
@@ -47,10 +49,11 @@ public class SecurityConfig {
                 .build();
         return new InMemoryUserDetailsManager(admin, customer);
     }
+    
 
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
-        return configuration.getAuthenticationManager();
+    public PasswordEncoder passwordEncoder(){
+        return new BCryptPasswordEncoder();
     }
 
 }
