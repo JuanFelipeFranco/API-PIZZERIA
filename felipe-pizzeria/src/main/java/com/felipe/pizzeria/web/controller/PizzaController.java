@@ -2,8 +2,9 @@ package com.felipe.pizzeria.web.controller;
 
 import com.felipe.pizzeria.persistence.entity.PizzaEntity;
 import com.felipe.pizzeria.service.PizzaService;
-import org.hibernate.query.Page;
+import com.felipe.pizzeria.service.dto.UpdatePizzaPriceDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,25 +21,23 @@ public class PizzaController {
     }
 
     @GetMapping
-    public ResponseEntity<List<PizzaEntity>> getAll(){
-        return ResponseEntity.ok(this.pizzaService.getAll());
+    public ResponseEntity<Page<PizzaEntity>> getAll(@RequestParam(defaultValue = "0")int page,
+                                                    @RequestParam(defaultValue = "8")int elements){
+        return ResponseEntity.ok(this.pizzaService.getAllPizza(page,elements));
     }
 
     @GetMapping("/{idPizza}")
     public ResponseEntity<PizzaEntity> getPizza(@PathVariable int idPizza){
-        return ResponseEntity.ok(this.pizzaService.getPizza(idPizza));
+        return ResponseEntity.ok(this.pizzaService.get(idPizza));
     }
+
 //------------------PAGE AND SORTING-------------------------------------------------
-/*    @GetMapping("/available")
+    @GetMapping("/available")
     public ResponseEntity<Page<PizzaEntity>> getAvailable(@RequestParam(defaultValue = "0") int page,
                                                           @RequestParam(defaultValue = "8")int elements,
-                                                          @RequestParam(defaultValue = "price")String sortBy){
-        return ResponseEntity.ok(this.pizzaService.getAvailable(page, elements, sortBy));
-    }*/
-
-    @GetMapping("/available")
-    public ResponseEntity<List<PizzaEntity>> getAvailablePizza(){
-        return ResponseEntity.ok(this.pizzaService.getAvailablePizza());
+                                                          @RequestParam(defaultValue = "price")String sortBy,
+                                                          @RequestParam(defaultValue = "ASC") String sortDirection){
+        return ResponseEntity.ok(this.pizzaService.getAvailablePizza(page, elements, sortBy,sortDirection));
     }
 
     @GetMapping("/name/{name}")
@@ -76,6 +75,16 @@ public class PizzaController {
         //si la pizza es diferente de null y ya existe.
         if (pizza.getIdPizza() != null && this.pizzaService.exists(pizza.getIdPizza())){
             return ResponseEntity.ok(this.pizzaService.save(pizza));
+        }
+        return ResponseEntity.badRequest().build();
+    }
+
+    @PutMapping("/price")
+    public ResponseEntity<Void> updatePrice(@RequestBody UpdatePizzaPriceDto updatePizzaPriceDto){
+        //si la pizza es diferente de null y ya existe.
+        if (this.pizzaService.exists(updatePizzaPriceDto.getPizzaId())){
+            this.pizzaService.updatePrice(updatePizzaPriceDto);
+            return ResponseEntity.ok().build();
         }
         return ResponseEntity.badRequest().build();
     }
