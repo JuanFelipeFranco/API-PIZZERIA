@@ -1,9 +1,13 @@
 package com.felipe.pizzeria.service;
 
 import com.felipe.pizzeria.persistence.entity.OrderEntity;
+import com.felipe.pizzeria.persistence.projection.OrderSummary;
 import com.felipe.pizzeria.persistence.repository.OrderRepository;
+import com.felipe.pizzeria.service.dto.RandomOrderDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -25,9 +29,7 @@ public class OrderService {
 
     //recuperamos todas las ordenes de la pizzeria
     public List<OrderEntity> getAll(){
-        List<OrderEntity> orders = this.orderRepository.findAll();
-        orders.forEach(o-> System.out.println(o.getCustomer().getName()));
-        return orders;
+        return this.orderRepository.findAll();
     }
 
     public List<OrderEntity> getTodayOrders(){
@@ -48,7 +50,24 @@ public class OrderService {
     }
 
     public List<OrderEntity> getInsideOrders(){
-        List<String> methods = Arrays.asList(ON_SITE);
+        List<String> methods = List.of(ON_SITE);
         return this.orderRepository.findAllByMethodIn(methods);
     }
+
+    @Secured("ROLE_ADMIN")
+    public List<OrderEntity> getCustomerOrders(String idCustomer){
+        return this.orderRepository.findCustomerOrders(idCustomer);
+    }
+
+    public OrderSummary getSummary(int orderId) {
+        return this.orderRepository.findSummary(orderId);
+    }
+
+
+    @Transactional
+    public boolean saveRandomOrder(RandomOrderDto randomOrderDto){
+        return this.orderRepository.saveRandomOrder(randomOrderDto.getIdCustomer(), randomOrderDto.getMethod());
+    }
 }
+
+
