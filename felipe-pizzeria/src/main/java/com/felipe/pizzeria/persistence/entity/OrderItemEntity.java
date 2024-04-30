@@ -18,7 +18,7 @@ public class OrderItemEntity {
     private Integer idOrder;
 
     @Id
-    @Column(name = "id_Item", nullable = false)
+    @Column(name = "id_item", nullable = false)
     private Integer idItem;
 
     @Column(name = "id_pizza", nullable = false)

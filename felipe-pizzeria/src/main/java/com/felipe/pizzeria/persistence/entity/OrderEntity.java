@@ -27,7 +27,7 @@ public class OrderEntity {
     @Column(nullable = false, columnDefinition = "DATETIME")
     private LocalDateTime date;
 
-    @Column(nullable = false, columnDefinition = "Decimal(6,2)")
+    @Column(nullable = false, columnDefinition = "DECIMAL(6,2)")
     private Double total;
 
     @Column(nullable = false, columnDefinition = "CHAR(1)")
@@ -42,6 +42,7 @@ public class OrderEntity {
     private CustomerEntity customer;
 
     @OneToMany(mappedBy = "order", fetch = FetchType.EAGER)
+    @OrderBy("price DESC")
     private List<OrderItemEntity> items;
 
 
