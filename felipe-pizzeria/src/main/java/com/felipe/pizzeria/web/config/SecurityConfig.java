@@ -41,7 +41,7 @@ public class SecurityConfig {
 //CCREANDO NUESTRO ADMIN EN MEMORIA
         UserDetails admin = User.builder()
                 .username("admin")
-                .password()
+                .password(passwordEncoder().encode("admin"))
                 .roles("ADMIN")
                 .build();
 
