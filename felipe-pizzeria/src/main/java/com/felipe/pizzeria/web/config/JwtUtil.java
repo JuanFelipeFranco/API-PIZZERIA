@@ -2,6 +2,7 @@ package com.felipe.pizzeria.web.config;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTVerificationException;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -21,5 +22,22 @@ public class JwtUtil {
                 .sign(ALGORITHM); //es la firma de nuestro JWT
     }
 
+    public boolean isValid(String jwt){
+        try {
+            //nuestro JWT requiere del ALGORITHM que creamos anteriormente
+            JWT.require(ALGORITHM)
+                    .build()
+                    .verify(jwt);
+            return true; //esto nos dice que tenemos un jwt valido.
+        }catch (JWTVerificationException e){
+            return false;
+        }
+    }
 
+    public String getUsername(String jwt){
+        return JWT.require(ALGORITHM)
+                .build()
+                .verify(jwt)
+                .getSubject(); //cuando creamos el JWT decimos que el subject es el username entonces al obtener el subject es el usuario.
+    }
 }
