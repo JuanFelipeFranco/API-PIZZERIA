@@ -1,6 +1,7 @@
 package com.felipe.pizzeria.web.controller;
 
 import com.felipe.pizzeria.persistence.entity.CustomerEntity;
+import com.felipe.pizzeria.persistence.entity.OrderEntity;
 import com.felipe.pizzeria.service.CustomerService;
 import com.felipe.pizzeria.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;

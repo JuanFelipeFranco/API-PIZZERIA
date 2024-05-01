@@ -16,7 +16,7 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
-@EnableMethodSecurity(securedEnabled = true)
+@EnableMethodSecurity(securedEnabled = true) //lo agregamos para implementar el metodo secured
 public class SecurityConfig {
 
     @Bean
@@ -25,6 +25,7 @@ public class SecurityConfig {
                 .csrf().disable()
                 .cors().and()
                 .authorizeHttpRequests()
+                .requestMatchers("/api/customers/**").hasAnyRole("ADMIN","CUSTOMER")
                 .requestMatchers(HttpMethod.GET, "/api/pizzas/**").hasAnyRole("ADMIN","CUSTOMER")
                 .requestMatchers(HttpMethod.POST, "/api/pizzas/**").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.PUT).hasRole("ADMIN")

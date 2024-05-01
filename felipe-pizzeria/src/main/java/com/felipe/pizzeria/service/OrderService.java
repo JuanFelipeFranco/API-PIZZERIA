@@ -54,7 +54,7 @@ public class OrderService {
         return this.orderRepository.findAllByMethodIn(methods);
     }
 
-    @Secured("ROLE_ADMIN")
+    @Secured("ROLE_ADMIN") //este metodo solo puede acceder el ADMIN
     public List<OrderEntity> getCustomerOrders(String idCustomer){
         return this.orderRepository.findCustomerOrders(idCustomer);
     }
