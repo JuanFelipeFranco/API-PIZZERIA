@@ -25,6 +25,7 @@ public class SecurityConfig {
                 .csrf().disable()
                 .cors().and()
                 .authorizeHttpRequests()
+                .requestMatchers("/api/auth/**").permitAll()
                 .requestMatchers("/api/customers/**").hasAnyRole("ADMIN","CUSTOMER")
                 .requestMatchers(HttpMethod.GET, "/api/pizzas/**").hasAnyRole("ADMIN","CUSTOMER")
                 .requestMatchers(HttpMethod.POST, "/api/pizzas/**").hasRole("ADMIN")
@@ -57,7 +58,10 @@ public class SecurityConfig {
         return new InMemoryUserDetailsManager(admin, customer);
     }
 */
-
+    @Bean //CREAMOS EL AUTENTICATION MANAGER QUE INYECTAREMOS EN EL CONTROLADOR
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
+        return configuration.getAuthenticationManager();
+    }
 
     @Bean
     public PasswordEncoder passwordEncoder(){
